@@ -7,7 +7,16 @@
       body{
         color: white;
         background: #59636D;
-        font-family: 'proxima-nova', 'helvetica';
+        font-family: 'Proxima Nova', 'helvetica';
+        text-align: center;
+        padding: 2.5em; 
+        border: 6px solid #58A7E2;
+        margin:0;
+      }
+
+      #graph{
+        text-align: center;
+        height: 80%;
       }
       text{
         color: white;
@@ -24,6 +33,12 @@
       
       .axis {
         shape-rendering: crispEdges;
+      }
+
+      .area{
+        fill: #28D6B1;
+        opacity: 0.5;
+        stroke-width: 0;
       }
 
       .x.axis line {
@@ -48,39 +63,43 @@
 
   <h1>Temperature Readings</h1>
 
-  <div id="graph" class="aGraph" style="position:absolute;top:0px;left:0; float:left;"></div>
+  <div id="graph" class="aGraph"></div>
 
 
   <script>
     /* implementation heavily influenced by http://bl.ocks.org/1166403 */
     
     // define dimensions of graph
+    var width = $('#graph').width();
+    var height = $('#graph').height();
     var m = [80, 80, 80, 80]; // margins
-    var w = 1000 - m[1] - m[3]; // width
-    var h = 400 - m[0] - m[2]; // height
+    var w = width - m[1] - m[3]; // width
+    var h = height - m[0] - m[2]; // height
     
     // create a simple data array that we'll plot with a line (this array represents only the Y values, X will just be the index location)
     $.getJSON( "/readings", function( data ) {
-    var x = d3.scale.linear().domain([0, data.length]).range([0, w]);
-    // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
-    var y = d3.scale.linear().domain([0, 30]).range([h, 0]);
+    
+    // Best to get the largest X value - X should really be time based;
+
+    var x = d3.scale.linear().domain([0, 100]).range([0, w]);
+    var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
+
+    var area = d3.svg.area()
+        .x(function(d) { return x(d.x); })
+        .y0(h)
+        .y1(function(d) { return y(d.y); });
       // automatically determining max range can work something like this
       // var y = d3.scale.linear().domain([0, d3.max(data)]).range([h, 0]);
 
     // create a line function that can convert data[] into x and y points
     var line = d3.svg.line()
-      // assign the X function to plot our line as we wish
       .x(function(d,i) { 
-        // verbose logging to show what's actually being done
-        console.log('Plotting X value for data point: ' + d + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
-        // return the X coordinate where we want to plot this datapoint
-        return x(i); 
+        console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
+        return x(d.x); 
       })
       .y(function(d) { 
-        // verbose logging to show what's actually being done
-        console.log('Plotting Y value for data point: ' + d + ' to be at: ' + y(d) + " using our yScale.");
-        // return the Y coordinate where we want to plot this datapoint
-        return y(d); 
+        console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");
+        return y(d.y); 
       })
 
       // Add an SVG element with the desired dimensions and margin.
@@ -89,6 +108,11 @@
             .attr("height", h + m[0] + m[2])
           .append("svg:g")
             .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+      graph.append("path")
+              .datum(data)
+              .attr("class", "area")
+              .attr("d", area);
 
       // create yAxis
       var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);

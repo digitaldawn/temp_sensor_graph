@@ -1,7 +1,7 @@
 class ReadingsController < ApplicationController
   def index
     @readings = Reading.all
-    render json: @readings.map{ |temp| temp.temperature }
+    render json: @readings.to_json(only: [], :methods => [:x, :y])
   end
 
   def create
