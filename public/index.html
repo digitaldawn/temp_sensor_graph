@@ -78,10 +78,11 @@
     
     // create a simple data array that we'll plot with a line (this array represents only the Y values, X will just be the index location)
     $.getJSON( "/readings", function( data ) {
-    
-    // Best to get the largest X value - X should really be time based;
 
-    var x = d3.scale.linear().domain([0, 100]).range([0, w]);
+    // X values should be the index, not the ID of the values.
+
+    // Get the index
+    var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
     var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
 
     var area = d3.svg.area()
