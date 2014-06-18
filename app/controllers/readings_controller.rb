@@ -15,6 +15,10 @@ class ReadingsController < ApplicationController
   def update
   end
 
+  def home
+    render :file => 'public/index.html' and return
+  end
+
 private
   def permitted_params
     params.permit(:Temperature)
