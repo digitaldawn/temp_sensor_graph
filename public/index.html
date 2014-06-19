@@ -139,7 +139,54 @@
 
     });
 
-    // X scale will fit all values from data[] within pixels 0-w
+    var inter = setInterval(function() {
+        updateData();
+    },2500);
+
+    function updateData() {
+        var width = $('#graph').width();
+        var height = $('#graph').height();
+        var m = [80, 80, 80, 80]; // margins
+        var w = width - m[1] - m[3]; // width
+        var h = height - m[0] - m[2]; // height
+    
+        $.getJSON( "/readings", function( data ) {
+          var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
+          var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
+          var area = d3.svg.area()
+              .x(function(d) { return x(d.x); })
+              .y0(h)
+              .y1(function(d) { return y(d.y); });
+          var line = d3.svg.line()
+            .x(function(d,i) { 
+              console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
+              return x(d.x); 
+            })
+            .y(function(d) { 
+              console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");
+              return y(d.y); 
+            })
+          // Draw The Thing
+          var svg = d3.select("#graph svg")
+                .attr("width", w + m[1] + m[3])
+                .attr("height", h + m[0] + m[2])
+          var vis = svg.transition();
+          var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
+          var yAxisLeft = d3.svg.axis().scale(y).ticks(4).orient("left");
+          vis.select(".x.axis")
+                .duration(750)
+                .call(xAxis);
+          vis.select(".y.axis")
+              .duration(750)
+              .call(yAxisLeft);
+          vis.select(".rect")
+              .duration(750)
+              .attr(".x", function(d) { return x(d.x); })
+              .attr(".y", function(d) { return y(d.y); });
+
+      });
+    };
+
   </script>
 
 
