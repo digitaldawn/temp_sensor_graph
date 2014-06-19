@@ -57,11 +57,12 @@
         fill: none;
         stroke: #515C62;
       }
+      span { font-weight: normal }
     </style>
   </head>
   <body>
 
-  <h1>Temperature Readings</h1>
+    <h1>Temperature Readings <span>in</span> Last 24 Hours</h1>
 
   <div id="graph" class="aGraph"></div>
 
@@ -95,11 +96,11 @@
     // create a line function that can convert data[] into x and y points
     var line = d3.svg.line()
       .x(function(d,i) { 
-        console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
+        //console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
         return x(d.x); 
       })
       .y(function(d) { 
-        console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");
+        //console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");
         return y(d.y); 
       })
 
@@ -159,11 +160,11 @@
               .y1(function(d) { return y(d.y); });
           var line = d3.svg.line()
             .x(function(d,i) { 
-              console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
+              //console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
               return x(d.x); 
             })
             .y(function(d) { 
-              console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");
+              //console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");
               return y(d.y); 
             })
           // Draw The Thing
