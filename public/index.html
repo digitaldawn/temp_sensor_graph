@@ -134,7 +134,7 @@
       
         // Add the line by appending an svg:path element with the data line we created above
       // do this AFTER the axes above so that the line is above the tick-lines
-        graph.append("svg:path").attr("d", line(data));
+        graph.append("svg:path").attr("class", "line").attr("d", line(data));
 
 
     });
@@ -179,11 +179,12 @@
           vis.select(".y.axis")
               .duration(750)
               .call(yAxisLeft);
-          vis.select(".rect")
+          vis.select(".line")
               .duration(750)
-              .attr(".x", function(d) { return x(d.x); })
-              .attr(".y", function(d) { return y(d.y); });
-
+              .attr("d", line(data));
+          vis.select(".area")
+              .duration(750)
+              .attr("d", area(data));
       });
     };
 
