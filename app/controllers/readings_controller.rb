@@ -1,7 +1,7 @@
 class ReadingsController < ApplicationController
   def index
-    x = -1
-    @readings = Reading.where(created_at: (Time.now - 1.day)..Time.now).map { |reading| { x: x+=1, y: reading.temperature } }
+    #x = -1
+    @readings = Reading.where(created_at: (Time.now - 1.day)..Time.now).map { |reading| { x: reading.created_at , y: reading.temperature } }
     render json: @readings.to_json
   end
 
