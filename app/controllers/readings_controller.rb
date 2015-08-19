@@ -3,7 +3,7 @@ class ReadingsController < ApplicationController
     #x = -1
     t = Time.now.to_i
 
-    @readings = Reading.where(created_at: (Time.now - 1.day)..Time.now).map { |reading| { x: (t.created_at.strftime(“%H:%M”).to_i - Time.now.strftime(“%H:%M”).to_i) , y: reading.temperature } }
+    @readings = Reading.where(created_at: (Time.now - 1.day)..Time.now).map { |reading| { x: (t.created_at.strftime(“%M”).to_i - Time.now.strftime(“%M”).to_i) , y: reading.temperature } }
     render json: @readings.to_json
   end
 
