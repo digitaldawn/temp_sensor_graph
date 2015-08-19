@@ -83,7 +83,8 @@
     // X values should be the index, not the ID of the values.
 
     // Get the index
-    var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
+    //var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
+    var x = d3.time.scale().range([0, w]);
     var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
 
     var area = d3.svg.area()
@@ -188,7 +189,7 @@
     
         $.getJSON( "/readings", function( data ) {
           //var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
-          var x = d3.time.scale()
+          var x = d3.time.scale().range([0,w]);
           var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
           var area = d3.svg.area()
               .x(function(d) { return x(d.x); })
@@ -228,7 +229,7 @@
   var peopleTable = tabulate(data, ["date", "close"]);
 
   </script>
-  
+
 
   </body>
 </html>
