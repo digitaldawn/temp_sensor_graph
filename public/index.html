@@ -83,9 +83,13 @@
     // X values should be the index, not the ID of the values.
 
     // Get the index
-    var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
-    var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
+    //var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
+    var minDate = getDate(data[0]),
+        maxDate = getDate(data[data.length-1]);
 
+    var x = d3.time.scale()..domain([minDate, maxDate])range([0,w]);
+    var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
+ 
     var area = d3.svg.area()
         .x(function(d) { return x(d.x); })
         .y0(h)
