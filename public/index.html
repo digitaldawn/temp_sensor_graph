@@ -91,7 +91,7 @@
     var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
  
     var area = d3.svg.area()
-        .x(function(d) { return x(d.x); })
+        .x(function(d) { return x(d3.time.days(new Date(d.jsonDate))); })
         .y0(h)
         .y1(function(d) { return y(d.y); });
       // automatically determining max range can work something like this
@@ -101,7 +101,7 @@
     var line = d3.svg.line()
       .x(function(d,i) { 
         //console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
-        return x(d.x); 
+        return x(d3.time.days(new Date(d.jsonDate)));
       })
       .y(function(d) { 
         //console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");
@@ -148,6 +148,11 @@
         updateData();
     },2500);
 
+    
+// helper function
+    function getDate(d) {
+        return new Date(d.jsonDate);
+    };
     function updateData() {
         var width = $('#graph').width();
         var height = $('#graph').height();
@@ -156,16 +161,18 @@
         var h = height - m[0] - m[2]; // height
     
         $.getJSON( "/readings", function( data ) {
-          var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
+          var x = d3.time.scale()..domain([minDate, maxDate])range([0,w]);
+          //var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
           var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
           var area = d3.svg.area()
-              .x(function(d) { return x(d.x); })
+              //.x(function(d) { return x(d.x); })
+              .x(function(d) { return x(d3.time.days(new Date(d.jsonDate))); })
               .y0(h)
               .y1(function(d) { return y(d.y); });
           var line = d3.svg.line()
             .x(function(d,i) { 
               //console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
-              return x(d.x); 
+              return x(d3.time.days(new Date(d.jsonDate))); 
             })
             .y(function(d) { 
               //console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");

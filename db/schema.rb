@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20140618045825) do
 
-  create_table "readings", force: true do |t|
+  create_table "readings", force: :cascade do |t|
     t.float    "temperature"
     t.datetime "created_at"
     t.datetime "updated_at"
