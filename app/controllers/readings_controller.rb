@@ -2,8 +2,9 @@ class ReadingsController < ApplicationController
   def index
     x = -1
     t = Time.now.to_i
-    #@readings = Reading.where(created_at: (Time.now - 1.year)..Time.now).map { |reading| { x: (reading.created_at.strftime(“%Y-%m-%d-%H:%M”), y: reading.temperature } }
-    @readings = Reading.where(created_at: (Time.now - 1.day)..Time.now).map { |reading| { x: x+1 , y: reading.temperature } }
+    @readings = Reading.where(created_at: (Time.now - 1.year)..Time.now).map { |reading| { x: (reading.created_at.to_i), y: reading.temperature } }
+    
+    #@readings = Reading.where(created_at: (Time.now - 1.day)..Time.now).map { |reading| { x: x+1 , y: reading.temperature } }
     render json: @readings.to_json
   end
 

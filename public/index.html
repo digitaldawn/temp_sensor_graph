@@ -1,208 +1,81 @@
+<!DOCTYPE HTML>
 <html>
-  <head>
-    <title>Simple Line Graph using SVG and d3.js</title>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://mbostock.github.com/d3/d3.v2.js"></script>
-    <style>
-      body{
-        color: white;
-        background: #59636D;
-        font-family: 'Proxima Nova', 'helvetica';
-        text-align: center;
-        padding: 2.5em; 
-        border: 6px solid #58A7E2;
-        margin:0;
-      }
 
-      #graph{
-        text-align: center;
-        height: 80%;
-      }
-      text{
-        color: white;
-        stroke: none;
-        fill: white;
-      }
-      /* tell the SVG path to be a thin blue line without any area fill */
-      path {
-          color: #fff;
-        stroke: #28D8B2;
-        stroke-width: 2;
-        fill: none;
-      }
-      
-      .axis {
-        shape-rendering: crispEdges;
-      }
+<head>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  window.onload = function () {
+  //$.getJSON( "/readings", function( data ) {
 
-      .area{
-        fill: #28D6B1;
-        opacity: 0.5;
-        stroke-width: 0;
-      }
+    var dps= [
+        /*  {"x": 144739076700000,"y": 23.6}, 
+          {"x": 144739077200000,"y": 23.7}, 
+          {"x": 144739077600000,"y": 23.6}, 
+          {"x": 144739078000000,"y": 23.6}];*/
+          { x: 1088620200000, y :71},
+          { x: 1104517800000, y : 55 },
+          { x: 1112293800000, y:  50 },
+          { x: 1136053800000, y : 65 },
+          { x: 1157049000000, y : 95 },
+          { x: 1162319400000, y : 68 },
+          { x: 1180636200000, y : 28 },
+          { x: 1193855400000, y : 34 },
+          { x: 1209580200000, y : 14 },
+          { x: 1230748200000, y : 34 },
+          { x: 1241116200000, y : 44 }];
+      // var dps = []; // dataPoints*/
 
-      .x.axis line {
-        stroke: #515C62;
-      }
-
-      .x.axis .minor {
-        stroke-opacity: .5;
-      }
-
-      .x.axis path {
-        display: none;
-      }
-
-      .y.axis line, .y.axis path {
-        fill: none;
-        stroke: #515C62;
-      }
-      span { font-weight: normal }
-    </style>
-  </head>
-  <body>
-
-    <h1>Temperature Readings <span>in</span> Last 24 Hours</h1>
-
-  <div id="graph" class="aGraph"></div>
-
-
-  <script>
-    /* implementation heavily influenced by http://bl.ocks.org/1166403 */
-    
-    // define dimensions of graph
-    var width = $('#graph').width();
-    var height = $('#graph').height();
-    var m = [80, 80, 80, 80]; // margins
-    var w = width - m[1] - m[3]; // width
-    var h = height - m[0] - m[2]; // height
-    
-    // create a simple data array that we'll plot with a line (this array represents only the Y values, X will just be the index location)
-    $.getJSON( "/readings", function( data ) {
-
-    // X values should be the index, not the ID of the values.
-
-    // Get the index
-    //var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
-    var minDate = getDate(data[0]),
-        maxDate = getDate(data[data.length-1]);
-
-    var x = d3.time.scale()..domain([minDate, maxDate])range([0,w]);
-    var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
- 
-    var area = d3.svg.area()
-        .x(function(d) { return x(d3.time.days(new Date(d.jsonDate))); })
-        .y0(h)
-        .y1(function(d) { return y(d.y); });
-      // automatically determining max range can work something like this
-      // var y = d3.scale.linear().domain([0, d3.max(data)]).range([h, 0]);
-
-    // create a line function that can convert data[] into x and y points
-    var line = d3.svg.line()
-      .x(function(d,i) { 
-        //console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
-        return x(d3.time.days(new Date(d.jsonDate)));
-      })
-      .y(function(d) { 
-        //console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");
-        return y(d.y); 
-      })
-
-      // Add an SVG element with the desired dimensions and margin.
-      var graph = d3.select("#graph").append("svg:svg")
-            .attr("width", w + m[1] + m[3])
-            .attr("height", h + m[0] + m[2])
-          .append("svg:g")
-            .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
-
-      graph.append("path")
-              .datum(data)
-              .attr("class", "area")
-              .attr("d", area);
-
-      // create yAxis
-      var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
-      // Add the x-axis.
-      graph.append("svg:g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + h + ")")
-            .call(xAxis);
-
-
-      // create left yAxis
-      var yAxisLeft = d3.svg.axis().scale(y).ticks(4).orient("left");
-      // Add the y-axis to the left
-      graph.append("svg:g")
-            .attr("class", "y axis")
-            .attr("transform", "translate(-25,0)")
-            .call(yAxisLeft);
-      
-        // Add the line by appending an svg:path element with the data line we created above
-      // do this AFTER the axes above so that the line is above the tick-lines
-        graph.append("svg:path").attr("class", "line").attr("d", line(data));
-
-
+    var chart = new CanvasJS.Chart("chartContainer",{
+      title :{
+        text: "Live Temperature"
+      },      
+      data: [{
+        type: "line",
+        //xValueType: “dateTime”,
+        dataPoints: dps
+                
+      }]
     });
 
-    var inter = setInterval(function() {
-        updateData();
-    },2500);
+      //var xVal = 0;
+      //var yVal = 100; 
+    var updateInterval = 1000;
+    var dataLength = 50; // number of dataPoints visible at any point
 
-    
-// helper function
-    function getDate(d) {
-        return new Date(d.jsonDate);
-    };
-    function updateData() {
-        var width = $('#graph').width();
-        var height = $('#graph').height();
-        var m = [80, 80, 80, 80]; // margins
-        var w = width - m[1] - m[3]; // width
-        var h = height - m[0] - m[2]; // height
-    
-        $.getJSON( "/readings", function( data ) {
-          var x = d3.time.scale()..domain([minDate, maxDate])range([0,w]);
-          //var x = d3.scale.linear().domain([0, data.length-1]).range([0, w]);
-          var y = d3.scale.linear().domain([0, 40]).range([h, 0]);
-          var area = d3.svg.area()
-              //.x(function(d) { return x(d.x); })
-              .x(function(d) { return x(d3.time.days(new Date(d.jsonDate))); })
-              .y0(h)
-              .y1(function(d) { return y(d.y); });
-          var line = d3.svg.line()
-            .x(function(d,i) { 
-              //console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
-              return x(d3.time.days(new Date(d.jsonDate))); 
-            })
-            .y(function(d) { 
-              //console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + y(d.y) + " using our yScale.");
-              return y(d.y); 
-            })
-          // Draw The Thing
-          var svg = d3.select("#graph svg")
-                .attr("width", w + m[1] + m[3])
-                .attr("height", h + m[0] + m[2])
-          var vis = svg.transition();
-          var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
-          var yAxisLeft = d3.svg.axis().scale(y).ticks(4).orient("left");
-          vis.select(".x.axis")
-                .duration(750)
-                .call(xAxis);
-          vis.select(".y.axis")
-              .duration(750)
-              .call(yAxisLeft);
-          vis.select(".line")
-              .duration(750)
-              .attr("d", line(data));
-          vis.select(".area")
-              .duration(750)
-              .attr("d", area(data));
-      });
+    var updateChart = function (count) {
+      count = count || 1;
+      // count is number of times loop runs to generate random dataPoints.
+      
+          /* for (var j = 0; j < count; j++) {  
+            //yVal = yVal +  Math.round(5 + Math.random() *(-5-5));
+        dps.push({
+          x: xVal,
+          y: yVal
+        });
+        xVal++;
+                };*/
+      if (dps.length > dataLength)
+      {
+        dps.shift();        
+      }
+      
+      chart.render();   
+
     };
 
+    // generates first set of dataPoints
+    updateChart(dataLength); 
+
+    // update chart after specified time. 
+    setInterval(function(){updateChart()}, updateInterval); 
+
+  }
   </script>
-
-
-
-  </body>
+  <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body>
+  <h1>Temperature Readings <span>in</span> Last 24 Hours</h1>
+  <div id="chartContainer" style="height: 300px; width:100%;">
+  </div>
+</body>
 </html>
