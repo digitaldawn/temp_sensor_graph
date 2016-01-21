@@ -25,8 +25,8 @@
 
       //var xVal = 0;
       //var yVal = 100; 
-    //var updateInterval = 1000;
-    //var dataLength = 50; // number of dataPoints visible at any point
+    var updateInterval = 1000;
+    var dataLength = 50; // number of dataPoints visible at any point
     var dataPoints = [];
     var dataSeries = { type: "line" };
     (function () {
@@ -41,12 +41,9 @@
 
     })();
 
-  //dataSeries.dataPoints = dataPoints;
-  //dps.push(dataSeries);
 
-  console.log(dps);
     
-    /*var updateChart = function (count) {
+    var updateChart = function (count) {
       count = count || 1;
       // count is number of times loop runs to generate random dataPoints.
       
@@ -57,7 +54,7 @@
           y: yVal
         });
         xVal++;
-                };
+                }; */
       if (dps.length > dataLength)
       {
         dps.shift();        
@@ -71,7 +68,7 @@
     updateChart(dataLength); 
 
     // update chart after specified time. 
-    setInterval(function(){updateChart()}, updateInterval); */
+    setInterval(function(){updateChart()}, updateInterval);
   
   
 
