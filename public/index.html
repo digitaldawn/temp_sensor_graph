@@ -5,31 +5,16 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript">
   window.onload = function () {
-  //$.getJSON( "/readings", function( data ) {
 
-   /*  var dps= [
-         {"x": 144739076700000,"y": 23.6}, 
-          {"x": 144739077200000,"y": 23.7}, 
-          {"x": 144739077600000,"y": 23.6}, 
-          {"x": 144739078000000,"y": 23.6}];
-          { x: 1088620200000, y :71},
-          { x: 1104517800000, y : 55 },
-          { x: 1112293800000, y:  50 },
-          { x: 1136053800000, y : 65 },
-          { x: 1157049000000, y : 95 },
-          { x: 1162319400000, y : 68 },
-          { x: 1180636200000, y : 28 },
-          { x: 1193855400000, y : 34 },
-          { x: 1209580200000, y : 14 },
-          { x: 1230748200000, y : 34 },
-          { x: 1241116200000, y : 44 }];*/
-       var dps = [{"x":1447390767,"y":23.6}]; // dataPoints*/
-
-    var chart = new CanvasJS.Chart("chartContainer",{
-      title :{
+    var dps = [];//{"x":1447390767,"y":23.6}]; // dataPoints*/
+    var chart = new CanvasJS.Chart("chartContainer",
+    {
+      title :
+      {
         text: "Live Temperature"
       },      
-      data: [{
+      data: [
+      {
         type: "line",
         //xValueType: “dateTime”,
         dataPoints: dps
@@ -46,8 +31,10 @@
     var dataSeries = { type: "line" };
     (function () {
         $.getJSON("/readings", function(thedata) {
-            $.each(thedata, function(i, v) {
-            dps.push({ x: new Date(v.Datetime), y: parseFloat(v.Value) });
+            //console.log(thedata);
+            $.each(thedata, function(key, value) {
+              //console.log(values);
+            dps.push({ x: new Date(value.x), y: value.y });
             });
             chart.render();
             })
